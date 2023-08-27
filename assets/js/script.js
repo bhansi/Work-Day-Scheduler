@@ -32,11 +32,10 @@ $(function () {
   // TODO: Add code to display the current date in the header of the page.
 
   function handleSaveButton() {
-    let parent = $(this).parent();
-    let index = Number(parent.attr("id").slice(5)) - 9;
+    let index = Number($(this).parent().attr("id").slice(5)) - 9;
+    descriptions[index] = $(this).prev().val();
 
-    descriptions[index] = parent.children().eq(1).val();
-    localStorage.setItem(JSON.stringify("descriptions", descriptions));
+    localStorage.setItem("descriptions", JSON.stringify(descriptions));
   }
 
   $(".saveBtn").on("click", handleSaveButton);
