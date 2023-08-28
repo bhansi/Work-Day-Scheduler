@@ -102,6 +102,9 @@ $(function () {
     descriptions[index] = $(this).prev().val();
 
     localStorage.setItem("descriptions", JSON.stringify(descriptions));
+
+    $(this).children().eq(1).show();
+    setTimeout(function() { $(".saved:visible").fadeOut() }, 3000);
   }
 
   $(".saveBtn").on("click", handleSaveButton);
