@@ -5,7 +5,10 @@ $(function () {
   let descriptions = ["", "", "", "", "", "", "", "", ""];
 
   function retreiveDescriptions() {
+    // Getting the descriptions from local storage
     descriptions = JSON.parse(localStorage.getItem("descriptions")).slice();
+
+    // Displaying the descriptions to the user
     $(".description").each(function() {
       let index = Number($(this).parent().attr("id").slice(5)) - 9;
       $(this).val(descriptions[index]);
@@ -14,14 +17,23 @@ $(function () {
 
   retreiveDescriptions();
 
-  // function getDescriptions() {
-  //   descriptions = [];
-  //   $(".description").each(function () {
-  //     descriptions.push($(this).val());
-  //   });
-  // }
+  function setTextAreaBackgroundColors() {
+    $(".description").each(function() {
+      let hour = Number($(this).parent().attr("id").slice(5));
+      if(hour < dayjs().hour()) {
+        $(this).addClass("past");
+      }
+      else if(hour === dayjs().hour()) {
+        $(this).addClass("present");
+      }
+      else {
+        $(this).addClass("future");
+      }
+    });
+  }
 
-  // getDescriptions();
+  setTextAreaBackgroundColors();
+
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
