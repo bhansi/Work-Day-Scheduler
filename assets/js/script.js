@@ -18,7 +18,7 @@ $(function () {
 
   retreiveDescriptions();
 
-  function setTextAreaBackgroundColors() {
+  function setDescriptionBackgroundColors() {
     $(".description").each(function() {
       // Remove existing class
       if($(this).hasClass("past")) { $(this).removeClass("past"); }
@@ -36,11 +36,22 @@ $(function () {
         $(this).addClass("future");
       }
     });
+    descriptionBackgroundColorTimeout();
   }
 
-  setTextAreaBackgroundColors();
+  setDescriptionBackgroundColors();
 
-
+  function descriptionBackgroundColorTimeout() {
+    let startTime = dayjs();
+    let endTime = dayjs()
+    endTime.$H += 1;
+    endTime.$m = 0;
+    endTime.$s = 0;
+    endTime.$ms = 0;
+    console.log(startTime);
+    console.log(endTime);
+    setTimeout(setDescriptionBackgroundColors, endTime - startTime);
+  }
 
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
