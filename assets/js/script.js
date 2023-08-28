@@ -102,10 +102,17 @@ $(function () {
     descriptions[index] = $(this).prev().val();
 
     localStorage.setItem("descriptions", JSON.stringify(descriptions));
-
+    
     $(this).children().eq(1).show();
     setTimeout(function() { $(".saved:visible").fadeOut() }, 3000);
   }
+  
+  function handleClearButton() {
+    $(".description").val("");
+    descriptions = ["", "", "", "", "", "", "", "", ""];
+    localStorage.setItem("descriptions", JSON.stringify(descriptions));
+  }
 
   $(".saveBtn").on("click", handleSaveButton);
+  $("#clearBtn").on("click", handleClearButton);
 });
