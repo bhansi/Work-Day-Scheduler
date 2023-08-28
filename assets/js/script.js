@@ -4,9 +4,8 @@ $(function () {
   function retreiveDescriptions() {
     // Getting the descriptions from local storage
     let storedDescriptions = localStorage.getItem("descriptions");
-    if(storedDescriptions) {
-      descriptions = JSON.parse(storedDescriptions).slice();
-    }
+    if(!storedDescriptions) { return; }
+    descriptions = JSON.parse(storedDescriptions).slice();
 
     // Displaying the descriptions to the user
     $(".description").each(function() {
