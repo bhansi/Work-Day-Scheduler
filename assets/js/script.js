@@ -3,6 +3,7 @@
 // in the html.
 $(function () {
   let descriptions = ["", "", "", "", "", "", "", "", ""];
+  let currentHour = dayjs().hour();
 
   function retreiveDescriptions() {
     // Getting the descriptions from local storage
@@ -19,11 +20,16 @@ $(function () {
 
   function setTextAreaBackgroundColors() {
     $(".description").each(function() {
+      // Remove existing class
+      if($(this).hasClass("past")) { $(this).removeClass("past"); }
+      else if($(this).hasClass("present")) { $(this).removeClass("present"); }
+      else { $(this).removeClass("future"); }
+
       let hour = Number($(this).parent().attr("id").slice(5));
-      if(hour < dayjs().hour()) {
+      if(hour < currentHour) {
         $(this).addClass("past");
       }
-      else if(hour === dayjs().hour()) {
+      else if(hour === currentHour) {
         $(this).addClass("present");
       }
       else {
@@ -33,6 +39,8 @@ $(function () {
   }
 
   setTextAreaBackgroundColors();
+
+
 
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
