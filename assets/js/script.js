@@ -17,7 +17,27 @@ $(function () {
 
   retreiveDescriptions();
 
-  function setDescriptionBackgroundColors() {
+  function updateDate() {
+    let dateString = dayjs().format("dddd, MMMM DD");
+
+    switch(dayjs().date()) {
+      case 1:
+        dateString += "st";
+        break;
+      case 2:
+        dateString += "nd";
+        break;
+      case 3:
+        dateString += "rd";
+        break;
+      default:
+        dateString += "th";
+    }
+
+    $("#currentDay").text(dateString);
+  }
+
+  function updateDescriptionBackgroundColors() {
     $(".description").each(function() {
       // Remove existing class
       if($(this).hasClass("past")) { $(this).removeClass("past"); }
@@ -36,12 +56,9 @@ $(function () {
         $(this).addClass("future");
       }
     });
-    descriptionBackgroundColorTimeout();
   }
-
-  setDescriptionBackgroundColors();
-
-  function descriptionBackgroundColorTimeout() {
+  
+  function pageTimeout() {
     let startTime = new Date();
     let endTime = new Date();
     endTime.setHours(endTime.getHours() + 1);
@@ -50,9 +67,16 @@ $(function () {
     console.log(startTime);
     console.log(endTime);
     console.log(endTime - startTime);
-    setTimeout(setDescriptionBackgroundColors, endTime - startTime);
+    setTimeout(updatePage, endTime - startTime);
   }
 
+  function updatePage() {
+    updateDate();
+    updateDescriptionBackgroundColors();
+    pageTimeout();
+  }
+  
+  updatePage();
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
