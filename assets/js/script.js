@@ -1,6 +1,3 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
 $(function () {
   let descriptions = ["", "", "", "", "", "", "", "", ""];
 
@@ -15,11 +12,14 @@ $(function () {
     });
   }
 
+  // Retrieve descriptions from local storage each time the page is refreshed
   retreiveDescriptions();
 
+  // Updates the date at the top of the page
   function updateDate() {
     let dateString = dayjs().format("dddd, MMMM DD");
 
+    // Logic to add st, nd, rd, or th at the end of a day number (e.g. 28th)
     switch(dayjs().date()) {
       case 1:
         dateString += "st";
@@ -58,18 +58,20 @@ $(function () {
     });
   }
   
+  // Function to calculate how much time to the next hour so the page can update
   function pageTimeout() {
     let startTime = new Date();
+
     let endTime = new Date();
+    // Set the end time to the start of the next hour
     endTime.setHours(endTime.getHours() + 1);
     endTime.setMinutes(0);
     endTime.setSeconds(0);
-    console.log(startTime);
-    console.log(endTime);
-    console.log(endTime - startTime);
+
     setTimeout(updatePage, endTime - startTime);
   }
 
+  // Calls all the functions needed to update the page
   function updatePage() {
     updateDate();
     updateDescriptionBackgroundColors();
@@ -77,36 +79,25 @@ $(function () {
   }
   
   updatePage();
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
 
   function handleSaveButton() {
     // Get the index from the parent element's id (hour number minus 9) and save the value at said index
     let index = Number($(this).parent().attr("id").slice(5)) - 9;
+    // Get value from description that's associated with this save button
     descriptions[index] = $(this).prev().val();
 
     localStorage.setItem("descriptions", JSON.stringify(descriptions));
     
-    $(this).children().eq(1).show();
-    setTimeout(function() { $(".saved:visible").fadeOut() }, 3000);
+    // Show 'saved' for 3 seconds in the save button before hiding it again
+    $(this).children().eq(0).hide();
+    $(this).children().eq(1).fadeIn();
+    setTimeout(function() {
+      $(".saved:visible").hide()
+      $(".fa-save:hidden").fadeIn();
+    }, 3000);
   }
   
+  // Clears all of the description elements and local storage
   function handleClearButton() {
     $(".description").val("");
     descriptions = ["", "", "", "", "", "", "", "", ""];
