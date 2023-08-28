@@ -3,7 +3,6 @@
 // in the html.
 $(function () {
   let descriptions = ["", "", "", "", "", "", "", "", ""];
-  let currentHour = dayjs().hour();
 
   function retreiveDescriptions() {
     // Getting the descriptions from local storage
@@ -25,11 +24,12 @@ $(function () {
       else if($(this).hasClass("present")) { $(this).removeClass("present"); }
       else { $(this).removeClass("future"); }
 
+      // Add a new class according to the hour stamp and current hour
       let hour = Number($(this).parent().attr("id").slice(5));
-      if(hour < currentHour) {
+      if(hour < dayjs().hour()) {
         $(this).addClass("past");
       }
-      else if(hour === currentHour) {
+      else if(hour === dayjs().hour()) {
         $(this).addClass("present");
       }
       else {
@@ -42,14 +42,14 @@ $(function () {
   setDescriptionBackgroundColors();
 
   function descriptionBackgroundColorTimeout() {
-    let startTime = dayjs();
-    let endTime = dayjs()
-    endTime.$H += 1;
-    endTime.$m = 0;
-    endTime.$s = 0;
-    endTime.$ms = 0;
+    let startTime = new Date();
+    let endTime = new Date();
+    endTime.setHours(endTime.getHours() + 1);
+    endTime.setMinutes(0);
+    endTime.setSeconds(0);
     console.log(startTime);
     console.log(endTime);
+    console.log(endTime - startTime);
     setTimeout(setDescriptionBackgroundColors, endTime - startTime);
   }
 
